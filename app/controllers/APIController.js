@@ -33,8 +33,17 @@ class SiteController {
       .catch((err) => next(err));
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  getBook(req, res) {
+    Book.findById(req.params.id)
+      .then((book) => {
+        res.json(book);
+      })
+      .catch(() => res.json({ status: false }));
+  }
+
   // eslint-disable-next-line class-methods-use-this,consistent-return
-  async register(req, res, next) {
+  async register(req, res) {
     // eslint-disable-next-line camelcase
     const { username, password, confirm_password } = req.body;
     const userExists = await userService.login(username);
