@@ -1,0 +1,101 @@
+<form method="post" action="/book/stored" enctype="multipart/form-data" class="">
+    <h2 class="mt-4">CREATE NEW BOOK</h2>
+    <div class="form-group">
+        <label>Name </label>
+        <input id="name" onchange="validation()" required name="name" type="text" class="form-control" placeholder="Eg. The Godfather" >
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Price (vnd) </label>
+                <input id="price" onchange="validation()" required min="0" name="price" type="number" class="form-control" placeholder="Eg. 25000" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Country </label>
+                <input id="country" onchange="validation()" name="country" type="text" class="form-control" placeholder="Eg. U.S" >
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Author </label>
+                <input id="author" onchange="validation()" required name="author" type="text" class="form-control" placeholder="Eg. Mario Puzo">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Publication Date </label>
+                <input name="publicationDate" type="number" class="form-control" placeholder="Eg. 1969">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputState">Category</label>
+                <select required name="category" id="category" class="form-control">
+                    <option value="" selected>Choose...</option>
+                    {{#each categories}}
+                        <option  value={{this._id}}>{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Quantity </label>
+                <input id="quantity" onchange="validation()" name="quantity" type="number" class="form-control" placeholder="Eg. 100">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="files">Select Images :</label>
+        <input name="image" required onchange="onChangeFile()" accept="image/png, image/gif, image/jpeg"  onChange="onChangeFile" type="file" id="image-file"  >
+        <img id="image-view" style="display: none; object-fit: cover;" width="300" height="400" src="" alt="">
+    </div>
+<!--    <img id="image-view" width="100" height="100" style="display: none; object-fit: cover"  src="" alt="">-->
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Description</label>
+        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" placeholder="E.g Description"  rows="4" ></textarea>
+    </div>
+    <button disabled id="btn-submit" type="submit" class="btn btn-primary">Add now</button>
+
+
+</form>
+<script>
+    const onChangeFile = () => {
+        const file = document.getElementById('image-file').files[0];
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('image-view').src = e.target.result;
+            document.getElementById('image-view').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+    const validation =()=>{
+        const name = document.getElementById('name').value;
+        const price = document.getElementById('price').value;
+        const country = document.getElementById('country').value;
+        const author = document.getElementById('author').value;
+        const quantity = document.getElementById('quantity').value;
+        const btnSubmit = document.getElementById('btn-submit');
+        let isValid = true;
+        if(
+            name.trim().length ===0
+                || price.trim().length ===0
+                || Number(price)<=0
+                || Number(price)>=1000000
+                || country.trim().length===0
+                || author.trim().length===0
+                || quantity.trim().length===0
+        ){
+          isValid = true;
+        }else{
+            isValid = false;
+        }
+        btnSubmit.disabled = isValid;
+    }
+</script>

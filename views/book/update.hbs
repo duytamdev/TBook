@@ -1,0 +1,82 @@
+<form method="post"  action="/book/{{book._id}}/update?_method=PUT" class="">
+    <h2 class="mt-4">UPDATE BOOK</h2>
+    <div class="form-group">
+        <label>Name </label>
+        <input value="{{{book.name}}}" required name="name" type="text" class="form-control" placeholder="Eg. The Godfather" >
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Price (vnd) </label>
+                <input value="{{{book.price}}}" required min="0" name="price" type="number" class="form-control" placeholder="Eg. 25000" >
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Country </label>
+                <input value="{{{book.country}}}" name="country" type="text" class="form-control" placeholder="Eg. U.S" >
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label>Author </label>
+                <input value="{{{book.author}}}" required name="author" type="text" class="form-control" placeholder="Eg. Mario Puzo">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Publication Date </label>
+                <input value="{{{book.publicationDate}}}" name="publicationDate" type="number" class="form-control" placeholder="Eg. 1969">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label for="inputState">Category</label>
+                <select required name="category" id="category" class="form-control">
+                    {{#each categories}}
+                        {{#if this.selected}}
+                            <option selected value={{this._id}}>{{this.name}}</option>
+                        {{else}}
+                        <option  value={{this._id}}>{{this.name}}</option>
+                        {{/if}}
+
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label>Quantity </label>
+                <input value="{{book.quantity}}" name="quantity" type="number" class="form-control" placeholder="Eg. 100">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="files">Select Images :</label>
+        <input onchange="onChangeFile()" accept="image/png, image/gif, image/jpeg" name="image" onChange="onChangeFile" type="file" id="image-file"  >
+        <img style="display: block; object-fit: cover;" id="image-view" style="display: none; object-fit: cover;" width="300" height="400" src="{{book.image}}" alt="">
+    </div>
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Description</label>
+        <textarea name="description" class="form-control" id="exampleFormControlTextarea1" placeholder="E.g Description"  rows="4" >{{{book.description}}}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Update now</button>
+
+
+</form>
+<script>
+    const onChangeFile = () => {
+        const file = document.getElementById('image-file').files[0];
+        console.log(file);
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('image-view').src = e.target.result;
+            document.getElementById('image-view').style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+</script>

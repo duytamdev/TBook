@@ -1,0 +1,154 @@
+
+
+<form method="post" action="/category/handle-form-actions" class="table-responsive mt-4">
+    <a class="mb-4" href="/stored/categories">Back to list</a>
+    <h2>Trash</h2>
+    <div class=" mb-4 d-flex text-align-center">
+        <div class="d-flex">
+            <div class="w-50 text-left justify-content-center align-item-center">
+                <label class="form-check-label  mb-0">
+                    <span class="form-check-sign"></span>
+                    <input id="checkbox-all" class="form-check-input" type="checkbox" value="">
+                    Select All
+                </label>
+            </div>
+            <select required name="action" class=" ml-2 mr-2 mr-sm select-all-checkbox select-action" id="inlineFormCustomSelect">
+                <option selected value="" >---Choose Action---</option>
+                <option  value="restore">Restore</option>
+                <option  value="deleteForce">Delete</option>
+            </select>
+            <button disabled id="btn-run" class="btn btn-primary btn-sm btn-action">Thực hiện</button>
+        </div>
+
+    </div>
+    <table class="table table-hover table-striped">
+        <thead>
+        <th >#</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Deleted at</th>
+        <th colspan="2">actions</th>
+
+        </thead>
+        <tbody>
+        {{#each categories}}
+        <tr>
+            <td>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input name="categoryIds" class="form-check-input" type="checkbox" value="{{this._id}}">
+                        <span class="form-check-sign"></span>
+                    </label>
+                </div>
+            </td>
+            <td>{{sum @index 1}}</td>
+            <td>{{this.name}}</td>
+            <td>
+<!--                <a target="_blank" name="tag-a-categories" value={{this.image}}> {{this.image}}</a>-->
+                <img src="{{this.image}}" alt="{{this.image}}" width="80" height="80"/>
+              </td>
+            <td>{{this.deletedAt}}</td>
+            <td>
+                <a class="restore-categories" data-id="{{this._id}}" href="">Restore</a>
+            </td>
+            <td>
+                <a  data-id="{{this._id}}" data-toggle="modal" data-target="#modal-delete" href="">Delete Forever</a>
+            </td>
+        </tr>
+        {{else}}
+            <tr>
+                <td colspan="7" class="text-center">
+                    nothing in the trash!!!
+                </td>
+            </tr>
+        {{/each}}
+
+        </tbody>
+    </table>
+
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Are you sure ?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this category?
+            </div>
+            <div class="modal-footer">
+                <button id="btn-delete-category" type="button" class="btn btn-danger">Delete</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- hide form-->
+<form name="form-category-delete" method="POST"></form>
+<form name="form-category-restore" method="POST"></form>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // const tagA = $('a[name="tag-a-categories"]');
+        const formCategoryDelete = document.forms['form-category-delete'];
+        const formCategoryRestore = document.forms['form-category-restore'];
+        const btnDeleteCategory = $('#btn-delete-category');
+        const manyButtonRestore = document.querySelectorAll('.restore-categories');
+        const checkboxAll = $('#checkbox-all');
+        const checkboxChildren = $('input[name="categoryIds"]');
+        const btnRunAction = $('#btn-run');
+        let id;
+        // set href a tag = value
+        // tagA.each(function (){
+        //     const value = $(this).attr('value');
+        //     $(this).attr("href", value)
+        // })
+
+        // when modal delete open
+        $('#modal-delete').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            id = button.data('id'); // Extract info from data-* attributes
+        })
+
+        btnDeleteCategory.click( function () {
+            formCategoryDelete.action = `/category/${id}/deleteForce?_method=DELETE`;
+            formCategoryDelete.submit();
+        })
+
+        manyButtonRestore.forEach((btnRestore) =>{
+            btnRestore.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const idCategory = btnRestore.getAttribute('data-id');
+                formCategoryRestore.action= `/category/${idCategory}/restore?_method=PATCH`
+                formCategoryRestore.submit();
+            });
+        })
+        // click checkbox all
+        checkboxAll.change(function () {
+            const isChecked = $(this).prop('checked');
+            checkboxChildren.prop('checked', isChecked);
+            renderCheckAllSubmitBtn()
+        })
+        // click checkbox children
+        checkboxChildren.change(function () {
+            const isCheckedAll = $('input[name="bookIds"]').length === $('input[name="categoryIds"]:checked').length;
+            console.log($(this).prop('value'));
+            checkboxAll.prop('checked', isCheckedAll);
+            renderCheckAllSubmitBtn()
+        })
+        // re-render check all submit button
+        function renderCheckAllSubmitBtn() {
+            const checkedCount = $('input[name="categoryIds"]:checked').length;
+            console.log(checkedCount);
+            btnRunAction.prop('disabled', !checkedCount > 0);
+        }
+
+    })
+</script>
