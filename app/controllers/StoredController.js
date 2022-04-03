@@ -45,7 +45,7 @@ class StoredController {
         const categoryFormat = categories.map((category) => ({
           _id: category._id,
           name: category.name,
-          image: category.image,
+          description: category.description,
           updatedAt: date.format(category.updatedAt),
         }));
         res.render('stored/stored-categories', { categories: categoryFormat, countDeleted });
@@ -73,7 +73,7 @@ class StoredController {
         const categoryFormat = categories.map((category) => ({
           _id: category._id,
           name: category.name,
-          image: category.image,
+          description: category.description,
           deletedAt: date.format(category.deletedAt),
         }));
         res.render('stored/stored-categories-trash', { categories: categoryFormat });

@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 
 const Category = new Schema({
   name: { type: String, required: true },
-  image: { type: String },
+  description: { type: String },
   date: { type: Date, default: Date.now },
 }, {
   timestamps: true,

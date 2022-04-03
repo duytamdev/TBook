@@ -16,7 +16,7 @@ class SiteController {
 
   // eslint-disable-next-line class-methods-use-this
   getAllCategories(req, res, next) {
-    Category.find({})
+    Category.find({}, '_id name')
       .then((categories) => {
         res.json(categories);
       })
@@ -35,7 +35,16 @@ class SiteController {
 
   // eslint-disable-next-line class-methods-use-this
   getBook(req, res) {
-    Book.findById(req.params.id)
+    Book.findById(req.params.id).populate('category')
+      .then((book) => {
+        res.json(book);
+      })
+      .catch(() => res.json({ status: false }));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getBookOfCategory(req, res) {
+    Book.find({ category: req.params.idCategory }).populate('category')
       .then((book) => {
         res.json(book);
       })
