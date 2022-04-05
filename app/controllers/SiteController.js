@@ -23,7 +23,8 @@ class SiteController {
         const checkPassword = await bcrypt.compare(password, user.password);
         if (checkPassword) {
           // eslint-disable-next-line no-underscore-dangle
-          req.session.token = jwt.sign({ id: user._id, username: user.username }, 'mykey');
+          const token = jwt.sign({ id: user._id, username: user.username }, 'mykey');
+          req.session.token = token;
           res.redirect('/stored/books');
         } else {
           res.redirect('/login');

@@ -16,6 +16,7 @@ class StoredController {
     Promise.all([query.populate('category'), Book.countDeleted()])
       .then(([books, countDeleted]) => {
         const bookFormat = books.map((book) => ({
+          // eslint-disable-next-line no-underscore-dangle
           _id: book._id,
           name: book.name,
           category: book.category,
@@ -24,7 +25,6 @@ class StoredController {
           updatedAt: date.format(book.updatedAt),
           publicationDate: book.publicationDate,
         }));
-        console.log(bookFormat[0]);
         res.render('stored/stored-books', { books: bookFormat, countDeleted });
       })
       .catch((err) => { next(err); });

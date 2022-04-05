@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const Book = require('../models/Book');
 const Category = require('../models/Category');
 const userService = require('../services/User');
+const Cart = require('../models/Cart');
 
 class SiteController {
   // eslint-disable-next-line class-methods-use-this
@@ -79,8 +80,11 @@ class SiteController {
       const checkPassword = await bcrypt.compare(password, user.password);
       if (checkPassword) {
         // eslint-disable-next-line no-underscore-dangle
-        req.session.token = jwt.sign({ id: user._id, username: user.username }, 'mykey');
-        res.json({ status: true });
+        const token = jwt.sign({ id: user._id, username: user.username }, 'mykey');
+        req.session.token = token;
+        res.json({
+          status: true, _id: user._id, username: user.username, token,
+        });
       } else {
         res.json({ status: false });
       }
@@ -88,6 +92,13 @@ class SiteController {
       // login false
       res.json({ status: false });
     }
+  }
+
+  async addCart(req, res, next) {
+    // const { userId, total, products } = req.body;
+    const data = req.body;
+    const newCart = await Cart.create(data);
+    res.status(201).send(newCart);
   }
 }
 module.exports = new SiteController();
