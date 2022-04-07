@@ -76,9 +76,9 @@ class SiteController {
     const { username } = req.params;
     const userExists = await userService.login(username);
     if (userExists !== null) {
-      res.json({ status: false });
+      res.json({ status: false, message: 'Username already exists' });
     } else {
-      res.json({ status: true });
+      res.json({ status: true, message: 'Username is not used' });
     }
   }
 
