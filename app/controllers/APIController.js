@@ -73,7 +73,7 @@ class SiteController {
 
   // eslint-disable-next-line class-methods-use-this
   async usernameIsUsed(req, res) {
-    const { username } = req.body;
+    const { username } = req.params;
     const userExists = await userService.login(username);
     if (userExists) {
       res.json({ status: false });

@@ -11,6 +11,6 @@ router.get('/product/:id', [authentication.checkToken], apiController.getBook);
 router.get('/products-of-category/:idCategory', [authentication.checkToken], apiController.getBookOfCategory);
 router.post('/auth/register', apiController.register);
 router.post('/auth/login', apiController.login);
-router.get('/auth/usernameIsUsed', apiController.usernameIsUsed);
+router.get('/auth/usernameIsUsed/:username', apiController.usernameIsUsed);
 router.post('/cart/add', apiController.addCart);
 module.exports = router;
