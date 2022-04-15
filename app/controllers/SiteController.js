@@ -17,6 +17,7 @@ class SiteController {
   async onLogin(req, res) {
     const { username, password } = req.body;
     const user = await userService.login(username);
+    console.log(user);
     if (user) {
       // admin login
       if (user.role === 'admin') {

@@ -2,7 +2,6 @@ const Category = require('../models/Category');
 const Book = require('../models/Book');
 // must be used to avoid bug
 // const IPv4Address = '192.168.1.3';
-const IPv4Address = 'localhost';
 const uploadFile = require('../../config/firebase/configFirebase');
 
 class BookController {

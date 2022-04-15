@@ -4,7 +4,7 @@ const Book = require('../models/Book');
 const Category = require('../models/Category');
 const userService = require('../services/User');
 const Cart = require('../models/Cart');
-
+// const user = require('../models/User');
 class SiteController {
   // eslint-disable-next-line class-methods-use-this
   getAllBook(req, res, next) {
@@ -105,7 +105,7 @@ class SiteController {
     }
   }
 
-  async addCart(req, res, next) {
+  async addCart(req, res) {
     // const { userId, total, products } = req.body;
     const data = req.body;
     const newCart = await Cart.create(data);

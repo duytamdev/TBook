@@ -1,26 +1,14 @@
 const mongoose = require('mongoose');
-
-// const connect = async () => {
-//   try {
-//     await mongoose.connect('mongodb://localhost:27017/TBook_NodeJS');
-//     console.log('connect success');
-//   } catch (e) {
-//     console.log(e);
-//     console.log('connect failed');
-//   }
-// };
-const password = 123;
-const nameDatabase = 'TBook_NodeJS';
+require('dotenv').config();
 
 const connect = async () => {
   try {
-    await mongoose.connect(`mongodb+srv://admin:${password}@cluster0.i9dag.mongodb.net/${nameDatabase}?retryWrites=true&w=majority`, {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
   } catch (e) {
-    console.log(e);
-    console.log('connect failed');
+    console.log('connect failed', e);
   }
 };
 module.exports = { connect };

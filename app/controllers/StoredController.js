@@ -4,7 +4,6 @@ const date = require('../../utils/fortmatdate');
 
 class StoredController {
   // [GET] /stored/books
-  // eslint-disable-next-line class-methods-use-this
   books(req, res, next) {
     const isQuery = !!req.query.q; // if ton tai -> true
     let query;
@@ -13,7 +12,7 @@ class StoredController {
     } else {
       query = Book.find({});
     }
-    Promise.all([query.populate('category'), Book.countDeleted()])
+    Promise.all([query.populate('category', 'name'), Book.countDeleted()])
       .then(([books, countDeleted]) => {
         const bookFormat = books.map((book) => ({
           // eslint-disable-next-line no-underscore-dangle
@@ -51,11 +50,6 @@ class StoredController {
         res.render('stored/stored-categories', { categories: categoryFormat, countDeleted });
       })
       .catch((err) => { next(err); });
-    // Category.find({})
-    //   .then((categories) => {
-    //     res.render('stored/stored-categories', { categories });
-    //   })
-    //   .catch((err) => next(err));
   }
 
   // [GET] /stored/trash/category

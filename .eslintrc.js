@@ -11,6 +11,8 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
-
+    'class-methods-use-this': 'off',
+    'no-underscore-dangle': 'off',
+    'no-console': 'off',
   },
 };
