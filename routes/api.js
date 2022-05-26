@@ -13,4 +13,5 @@ router.post('/auth/register', apiController.register);
 router.post('/auth/login', apiController.login);
 router.get('/auth/usernameIsUsed/:username', apiController.usernameIsUsed);
 router.post('/cart/add', apiController.addCart);
+router.get('/products/get-all-by-name-category',apiController.getBooksByNameCategory);
 module.exports = router;

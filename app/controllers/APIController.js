@@ -111,5 +111,13 @@ class SiteController {
     const newCart = await Cart.create(data);
     res.status(201).send(newCart);
   }
+  getBooksByNameCategory(req, res) {
+    const nameCategory = req.query.nameCategory;
+    Book.find({  },'name').populate({path:'category',match:{name:{ $regex: new RegExp(nameCategory), $options: 'i' }},select:'_id name'})
+      .then((books) => {
+        res.json(books);
+      })
+      .catch(() => res.json({ status: false }));
+  }
 }
 module.exports = new SiteController();
